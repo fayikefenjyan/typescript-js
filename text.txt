@@ -1,0 +1,160 @@
+type & value չենք կարող փոփոխել․․․եթե number-ի համարա․մենակ number-ով կարանք փոխենք ու եթե string-ի համարա․մենակ string-ով․․mix-ի ժամանակ կարող ենք փոփոխել
+
+object-ի մեջ եթե տենց բան չի եղել․․կողից չի ավելացնի
+
+------
+let character: string;
+let age: number;
+let isLoggedIn: boolean;
+let ninjas: string[] = [];
+
+------հայտարարման ձևեր
+
+-----
+let mixed: (string|number|boolean)[] = [];
+
+mixed.push('hello')
+mixed.push(20)
+mixed.push(true)
+
+-----mix-ա սարքած, էս հայտարարման ձևով կարանք ինչ արժեք ուզենք տակից տանք
+
+let uid: string|number;
+uid = '123';
+uid = 123
+
+-----երբ զանգվածի հետ չի․․փակագիծ չենք դնում string|number-ի միջև
+
+
+------- 1 ձև
+let ninjaOne: object;
+ninjaOne = { name: 'rax', age: 12 }
+
+------- 2 ձև
+
+let ninjaTwo: {
+  name: string,
+  age: number;
+  beltColor: string
+}
+
+ninjaTwo = { name: 'amr', age: 12, beltColor: 'red', skills: 'sdsc'}-----էս դեպքում նոր բան․օրինակ՝ skill չենք կարա ավելացնենք
+
+
+-------Dynamic (any) types
+
+let age: any = 25;
+
+age = true;
+console.log(age);
+age = 'hello';
+console.log(age);
+age = { name: 'luigi' }
+console.log(age);          Result` true, hello, {name: 'luigi}
+
+let mixed: any[] = []-----push-ով ավելցնում ենք տարբեր տիպի բաներ, վերջում զանգվածի մեջ տպումա
+
+------համարյա չի օգտագործվում․․․
+
+որպիսի src-ից դուրս ստեղծած նոր օրինակ՝ app.ts-ը tsc սեղմելուց հետո չկոմպիլացնի app.js-ով public-ում․դրա համար մեր  tsc --init-ով tsconfig.json-ում նախավերջում
+գրում ենք՝ "include": ["src"] որ մենակ src-ի մեջիններին կոմպիլացնի․․․
+
+-------------
+const add = (a: number, b: number, c: number | string = 10) => {
+    console.log(a + b);
+    console.log(c);
+}
+
+add(5, 6)
+----------ֆունկցիայի օրինակներ
+
+----------------------------------------------------------------------------------------------------------
+-----Generic method---
+const addUID = <T extends {name: string}> (obj: T) => {
+    let uid = Math.floor(Math.random() * 100);
+    return { ...obj, uid };
+}
+
+let docOne = addUID({ name: 'mario', age: 22 })
+let docTwo = addUID('hello')
+
+console.log(docOne.age);
+console.log(docTwo);
+
+--ստեղ օբյեկտների վրա ենք կիրառել՝էս պահը- <T extends {name: string}> (obj: T)
+
+//with interfaces
+interface Resource {
+    uid: number, 
+    resourceName: string,
+    data: '???'
+}
+----ինչ տիպի ուզում ենք լինի օրինակ data-ն (string, obj, number) էլի Resource<T> ու T-ի մեջ գրում ենք էն,ինչը կուզենք փոխանցվի``data: T
+interface Resource<T> {
+    uid: number;
+    resourceName: string;
+    data: T:;
+}
+
+const docThree: Resource<object> = {
+    uid: 1,
+    resourceName: 'person',
+    data: {name: 'Shon'}
+}
+// Array method
+
+const docFour: Resource<string[]> = {
+    uid: 2,
+    resourceName: 'list',
+    data: ['bread', 'salt', 'milk']
+}
+console.log(docThree, docFour);
+----------------------------------------------------------------------------------------------------------
+//---- ENUM ----
+Enums-ը const երկարության տվյալների կառուցվածքներ են, որոնք պարունակում են const արժեքների մի շարք,այս հաստատուն արժեքներից յուրաքանչյուրը հայտնի է որպես enum-ի անդամ:
+
+enum ResourceType { BOOK, AUTHOR, FILM, DIRECTOR, PERSON }
+
+interface Resource<T> {
+    uid: number;
+    resourceType: ResourceType;
+    data: T;
+}
+
+const docOne: Resource<object> = {
+    uid: 1,
+    resourceType: ResourceType.BOOK,
+    data: { title: 'name of the wind' }
+}
+const docTwo: Resource<object> = {
+    uid: 10,
+    resourceType: ResourceType.PERSON,
+    data: { name: 'kar' }
+}
+
+console.log(docOne);
+console.log(docTwo);
+
+----------------------------------------------------------------------------------------------------------
+----Tuple---
+
+Tuple-ը TypeScript տեսակ է, որն աշխատում է զանգվածի պես՝ որոշ հատուկ նկատառումներով. 
+զանգվածի տարրերի թիվը ֆիքսված է: Տարրերի տեսակը հայտնի է. 
+Պարտադիր չէ, որ զանգվածի տարրերի տեսակը նույնը լինի:
+
+The structure of the tuple needs to stay the same (a string followed by a number), whereas the array can have any combination of the two types specified (this can be extended to as many types as is required).
+
+
+// Tuples
+
+let arr = ['ryu', 25, true]
+arr[0] = false;
+arr[1] = 'yoshi';
+arr = [30, false, 'yoshi']
+
+let tuple: [string, number, boolean] = ['ryu', 25, true];// tuple principle
+tuple[0] = 25 // can't
+tuple[1] = 25 // can
+
+
+
